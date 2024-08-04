@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import Slider from '@react-native-community/slider';
+import Slider from '@react-native-community/slider'; // Import Slider component
+import BuyPopUp from './BuyPopUp';
+import SellPopUp from './SellPopUp';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/navigationTypes';
 
-type StockTradingPageProps = {
-  stockName: string;
-  carbonFootprint: string;
-  stockPrices: number[];
-  greenScore: number;
-  marketCap: string;
-  peRatio: number;
-  pbRatio: number;
-  roe: number;
-  dividendYield: number;
-};
+type StockTradingPageProps = StackScreenProps<RootStackParamList, 'StockTradingPage'>;
 
-const DashboardPage: React.FC<StockTradingPageProps> = ({ 
-  stockName, 
-  carbonFootprint, 
-  stockPrices, 
-  greenScore,
-  marketCap,
-  peRatio,
-  pbRatio,
-  roe,
-  dividendYield 
+const StockTradingPage: React.FC<StockTradingPageProps> = ({ 
+  route,
+  navigation
 }) => {
+  const {
+    stockName, 
+    carbonFootprint, 
+    stockPrices = [120, 125, 130, 135, 140, 145, 150],
+    greenScore = 50,
+    marketCap = "1650 Cr",
+    peRatio = 1.2,
+    pbRatio = 1.8,
+    roe = 2.08,
+    dividendYield = 5
+  } = route.params; // Destructure params from route
+  
   const [stocksPurchased, setStocksPurchased] = useState(0);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [sellModal, setSellModal] = useState(false); 
   const screenWidth = Dimensions.get('window').width - 40;
 
   const chartConfig = {
@@ -40,32 +41,44 @@ const DashboardPage: React.FC<StockTradingPageProps> = ({
     useShadowColorFromDataset: false,
     propsForDots: {
       r: "2",
-      strokeWidth: "2",
-      stroke: "#6db474"
+      strokeWidth: "3",
+      stroke: "#009688"
     }
   };
 
   const data = {
-    labels: stockPrices.map((_, index) => `Day ${index + 1}`),
+    labels: stockPrices.length > 0 ? stockPrices.map((_, index) => `Day ${index + 1}`) : ['No Data'],
     datasets: [
       {
-        data: stockPrices,
+        data: stockPrices.length > 0 ? stockPrices : [Math.floor(Math.random() * 100) + 50],
         color: (opacity = 1) => `rgba(109, 180, 116, ${opacity})`,
         strokeWidth: 2
       }
     ],
-    legend: [`${stockName} Prices`]
+    legend: stockName ? [`${stockName} Prices`] : ['Stock Prices'] // Ensure legend has a default value
   };
 
-  const calculateSavings = (quantity: number) => {
-    return quantity * 10;
+  const handleBuyPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleSellPress = () => {
+    setSellModal(true);
+  };
+
+  const handleSellClose = () => {
+    setSellModal(false);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.stockName}>{stockName}</Text>
       <View style={styles.card}>
-        <Text style={styles.carbonFootprint}>Carbon Footprint: {carbonFootprint} tonnes</Text>
+        <Text style={styles.carbonFootprint}>Avoided Emissions: {carbonFootprint} 50 tonnes</Text>
       </View>
       <View style={styles.chartContainer}>
         <LineChart
@@ -78,21 +91,21 @@ const DashboardPage: React.FC<StockTradingPageProps> = ({
         />
       </View>
       <View style={styles.scrollContainer}>
-        <Text style={styles.scrollText}>Number of Stocks Purchased:</Text>
-        {/* <View style={styles.sliderBox}>
+        <Text style={styles.scrollText}>Number of Stocks Purchased: {Math.floor(0.25 * stocksPurchased)}</Text>
+        <View style={styles.sliderBox}>
           <Slider
             style={styles.slider}
             minimumValue={0}
             maximumValue={100}
             step={1}
             value={stocksPurchased}
-            onValueChange={(value) => setStocksPurchased(value)}
-            minimumTrackTintColor="#6db474"
-            maximumTrackTintColor="#e0e0e0"
-            thumbTintColor="#8db670"
+            onValueChange={(val) => setStocksPurchased(val)}
+            minimumTrackTintColor="#009688"
+            maximumTrackTintColor="#ddd"
+            thumbTintColor="#f59025"
           />
-          <Text style={styles.savingsText}>{stocksPurchased}</Text>
-        </View> */}
+          <Text style={styles.savingsText}>Saves {Math.floor(stocksPurchased)} Metric Tonnes of CO2 annually</Text>
+        </View>
       </View>
       <View style={styles.statisticsContainer}>
         <View style={styles.column}>
@@ -107,13 +120,21 @@ const DashboardPage: React.FC<StockTradingPageProps> = ({
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, styles.buyButton]}>
+        <TouchableOpacity
+          style={[styles.button, styles.buyButton]}
+          onPress={handleBuyPress}
+        >
           <Text style={styles.buttonText}>Buy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.sellButton]}>
+        <TouchableOpacity
+          style={[styles.button, styles.sellButton]}
+          onPress={handleSellPress}
+        >
           <Text style={styles.buttonText}>Sell</Text>
         </TouchableOpacity>
       </View>
+      <BuyPopUp visible={isModalVisible} onClose={handleCloseModal} />
+      <SellPopUp visible={sellModal} onClose={handleSellClose} />
     </ScrollView>
   );
 };
@@ -128,11 +149,11 @@ const styles = StyleSheet.create({
   stockName: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#6db474',
+    color: '#009688',
     marginBottom: 10
   },
   card: {
-    backgroundColor: '#d3ecbc',
+    backgroundColor: '#009688',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
@@ -149,11 +170,11 @@ const styles = StyleSheet.create({
   },
   carbonFootprint: {
     fontSize: 18,
-    color: '#6db474'
+    color: '#fff', 
+    fontFamily: "Montserrat-Bold"
   },
   chartContainer: {
-    borderWidth: 1,
-    borderColor: '#b1d697',
+    borderColor: 'grey',
     borderRadius: 10,
     padding: 10,
     backgroundColor: '#f8f8f8',
@@ -177,10 +198,10 @@ const styles = StyleSheet.create({
   scrollText: {
     fontSize: 16,
     marginBottom: 10,
-    color: '#6db474'
+    color: '#009688'
   },
   sliderBox: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f8f8f8",
     borderRadius: 10,
     padding: 10,
     alignItems: 'center',
@@ -201,7 +222,8 @@ const styles = StyleSheet.create({
   },
   savingsText: {
     fontSize: 16,
-    color: '#6db474'
+    color: '#009688',
+    marginTop: 10
   },
   statisticsContainer: {
     width: '100%',
@@ -210,8 +232,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     padding: 10,
-    borderWidth: 1,
-    borderColor: '#b1d697',
+    borderColor: 'grey',
     borderRadius: 10,
     backgroundColor: '#f8f8f8',
     shadowColor: '#000',
@@ -229,7 +250,7 @@ const styles = StyleSheet.create({
   },
   statisticsText: {
     fontSize: 16,
-    color: '#6db474',
+    color: "#009688",
     marginBottom: 5
   },
   buttonContainer: {
@@ -257,7 +278,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#97ce7d'
   },
   sellButton: {
-    backgroundColor: '#8db670'
+    backgroundColor: '#f74545'
   },
   buttonText: {
     color: '#fff',
@@ -266,4 +287,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DashboardPage;
+export default StockTradingPage;

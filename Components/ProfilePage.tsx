@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/navigationTypes'; // Adjust the path as needed
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { RouteProp } from '@react-navigation/native';
 
 // Define the type for the props
@@ -13,7 +14,7 @@ interface ProfilePageProps {
   navigation: ProfilePageNavigationProp;
 }
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ route }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ route, navigation }) => {
   const {
     name = 'N/A',
     email = 'N/A',
@@ -29,6 +30,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ route }) => {
 
   const handleDownloadReports = () => {
     // Add your report download logic here
+  };
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    // For example, you might clear authentication tokens and navigate to a login screen
+    navigation.navigate('Login'); // Replace 'Login' with the appropriate screen name
   };
 
   return (
@@ -78,6 +85,44 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ route }) => {
           <Text style={styles.buttonText}>Download Reports</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.navBarContainer}>
+        <View style={styles.navBar}>
+          <TouchableOpacity 
+            style={styles.navButton}
+            onPress={() => navigation.navigate('DashboardPage')}
+          >
+            <Icon name="home" size={30} color="#f59025" />
+            <Text style={styles.navButtonText}>Home</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.navButton}
+            onPress={() => navigation.navigate('HoldingsPage')} // Navigate to HoldingsPage on press
+          >
+            <Icon name="account-balance-wallet" size={24} color="#f59025" />
+            <Text style={styles.navButtonText}>My Holdings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.navButton}
+            onPress={() => navigation.navigate('ProfilePage', {
+              name: 'Virat Kohli',
+              email: 'viratkohli@gmail.com',
+              mobile: '+99953477263',
+              profilePhotoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCvFCNx3XOOU9GirFqWfVMedEN_EIzJS-aKg&s',
+              tradeBalance: 150000,
+              bankAccounts: ['Federal Bank: ********4656', 'HDFC Bank: ********9001'],
+            })}
+          >
+            <Icon name="person" size={24} color="#f59025" />
+            <Text style={styles.navButtonText}>My Profile</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -196,6 +241,43 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  navBarContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  navBar: {
+    position: 'absolute', 
+    width: '109%',
+    marginTop: 325,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+    paddingVertical: 10,
+    backgroundColor: '#fff'
+  },
+  navButton: {
+    alignItems: 'center',
+    padding: 10
+  },
+  navButtonText: {
+    fontSize: 16,
+    color: '#f59025',
+    marginTop: 5
+  },
+  logoutButton: {
+    marginTop: 20,
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#f74545', // Light Red
+  },
+  logoutButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });
 
 export default ProfilePage;

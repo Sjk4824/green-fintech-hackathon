@@ -11,7 +11,7 @@ const InputField: React.FC<InputFieldProps> = ({ placeholder }) => {
       <View style={styles.inputContainer}>
         <TextInput
           placeholder={placeholder}
-          placeholderTextColor="#8a8a8a" // Darkened placeholder color
+          placeholderTextColor="black" // Darkened placeholder color
           style={styles.textInput}
         />
       </View>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     height: 47,
-    backgroundColor: "#E6E6E6", // Hex for input background
+    backgroundColor:"#ededed", // Hex for input background
     borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Montserrat-Bold",
     color: "#737272",
     fontSize: 14,
     opacity: 0.22,

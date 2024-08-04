@@ -7,6 +7,7 @@ import DashboardPage from './Components/DashboardPage'; // Import DashboardPage
 import ProfilePage from './Components/ProfilePage';
 import { RootStackParamList } from './navigation/navigationTypes';
 import HoldingsPage from './Components/MyHoldingsPage';
+import StockTradingPage from './Components/StockTradingPage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -20,7 +21,7 @@ const App = () => {
           options={{ headerShown: false }} // Optional: Hide header for login page
         />
         <Stack.Screen
-          name="Dashboard"
+          name="DashboardPage"
           component={DashboardPage}
           options={{ headerShown: false }} // Optional: Set title for Dashboard page
         />
@@ -28,12 +29,12 @@ const App = () => {
           name="ProfilePage"
           component={ProfilePage}
           initialParams={{
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            mobile: '123-456-7890',
+            name: 'Virat Kohli',
+            email: 'viratkohli@gmail.com',
+            mobile: '+99953477263',
             profilePhotoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCvFCNx3XOOU9GirFqWfVMedEN_EIzJS-aKg&s',
-            tradeBalance: 1000,
-            bankAccounts: ['Bank A', 'Bank B'],
+            tradeBalance: 150000,
+            bankAccounts: ['Federal Bank: ********4656', 'HDFC Bank: ********9001'],
           }}
           options={{ headerShown: false }}
         />
@@ -42,6 +43,11 @@ const App = () => {
           component={HoldingsPage}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+        name="StockTradingPage"
+        component={StockTradingPage}
+        options={{ headerShown: false }}
+      />
       </Stack.Navigator>
     </NavigationContainer>
   );

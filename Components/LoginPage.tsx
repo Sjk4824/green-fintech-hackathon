@@ -1,4 +1,3 @@
-// LoginPage.tsx
 import React from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import InputField from "./InputField"; // Adjust the path based on your project structure
@@ -26,11 +25,11 @@ const LoginPage: React.FC<Props> = ({ navigation }) => {
         <InputField placeholder="Username" />
         <InputField placeholder="Full Name" />
         <InputField placeholder="Date of Birth" />
-        <InputField placeholder="Password" />
+        <InputField placeholder="Password"/>
         
         <TouchableOpacity 
           style={styles.rect7}
-          onPress={() => navigation.navigate('Dashboard')} // Navigate to Dashboard on press
+          onPress={() => navigation.navigate('DashboardPage')} // Navigate to Dashboard on press
         >
           <Text style={styles.createAccount}>Create Account</Text>
         </TouchableOpacity>
@@ -56,11 +55,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   rect7: {
-    width: 175,
-    height: 36,
-    backgroundColor: "#9CD063",
+    width: 190,
+    height: 45,
+    backgroundColor:"#009688",
     borderRadius: 19,
-    marginTop: 25,
+    marginTop: 6,
     marginBottom: 30,
     alignItems: "center",
     justifyContent: "center",

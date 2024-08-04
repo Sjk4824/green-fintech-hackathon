@@ -1,32 +1,38 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { RootStackParamList } from "../navigation/navigationTypes";
 import { StackNavigationProp } from '@react-navigation/stack';
 
-type DashboardPageNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+type DashboardPageNavigationProp = StackNavigationProp<RootStackParamList, 'DashboardPage'>;
 
 interface Props {
   navigation: DashboardPageNavigationProp;
 }
-
 // Temporary data for demonstration
 const stocks = [
-  { name: 'ABC Corp', price: '$120.50', change: '+2.50%' },
-  { name: 'XYZ Inc', price: '$95.30', change: '-1.20%' },
-  { name: 'LMN Ltd', price: '$78.90', change: '+3.10%' },
-  { name: 'OPQ Co', price: '$110.00', change: '-0.50%' },
-  { name: 'RST PLC', price: '$89.75', change: '+1.75%' }
+  { name: 'K.P. Energy Limited', price: '₹436.6', change: '+2.50%' },
+  { name: 'BF Utilities Limited', price: '₹876.4', change: '-1.20%' },
+  { name: 'KPI Green Energy Limited', price: '₹1771.2', change: '+3.10%' },
+  { name: 'SJVN Limited', price: '₹131.56', change: '-0.50%' },
+  { name: 'KKV Agoro Powers Limited', price: '₹1119.34', change: '+1.75%' }
 ];
 
 const DashboardPage: React.FC<Props> = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState('');
   return (
     <View style={styles.container}>
       <Text style={styles.pageTitle}>Dashboard</Text>
-      
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Explore..."
+        value={searchQuery}
+        onChangeText={text => setSearchQuery(text)}
+      />
       <View style={styles.scoreContainer}>
         <View style={styles.scoreBox}>
-          <Text style={styles.scoreText}>Green Score: 85</Text>
+          <Text style={styles.scoreText}>Green Score: 87.60</Text>
         </View>
         <View style={styles.scoreBox}>
           <Text style={styles.scoreText}>Percentile: 90</Text>
@@ -36,26 +42,40 @@ const DashboardPage: React.FC<Props> = ({ navigation }) => {
       <View style={styles.topContainers}>
         <View style={styles.containerBox}>
           <Text style={styles.boxTitle}>Top Gainer</Text>
-          <Text style={styles.boxContent}>ABC Corp</Text>
-          <Text style={styles.boxContent}>+$5.25</Text>
+          <Text style={styles.boxContent}>K.P. Energy Limited</Text>
+          <Text style={styles.boxContent}>+5.65%</Text>
         </View>
         <View style={styles.containerBox}>
           <Text style={styles.boxTitle}>Top Loser</Text>
-          <Text style={styles.boxContent}>XYZ Inc</Text>
-          <Text style={styles.boxContent}>-$3.00</Text>
+          <Text style={styles.boxContent}>NHPC Limited</Text>
+          <Text style={styles.boxContent}>-3.25%</Text>
         </View>
       </View>
 
       <View style={styles.stockListContainer}>
         <Text style={styles.stockListTitle}>Top 5 Green Stocks</Text>
         <ScrollView style={styles.stockList}>
-          {stocks.map((stock, index) => (
-            <View key={index} style={styles.stockBox}>
-              <Text style={styles.stockName}>{stock.name}</Text>
-              <Text style={styles.stockPrice}>{stock.price}</Text>
-              <Text style={styles.stockChange}>{stock.change}</Text>
-            </View>
-          ))}
+        {stocks.map((stock, index) => (
+  <TouchableOpacity 
+    key={index} 
+    style={styles.stockBox} 
+    onPress={() => navigation.navigate('StockTradingPage', {
+      stockName: stock.name,
+      carbonFootprint: 'Low', // Replace with actual data if available
+      stockPrices: [120.50, 115.30, 125.60], // Replace with actual data if available
+      greenScore: 85, // Replace with actual data if available
+      marketCap: '50B', // Replace with actual data if available
+      peRatio: 22.5, // Replace with actual data if available
+      pbRatio: 3.1, // Replace with actual data if available
+      roe: 15.2, // Replace with actual data if available
+      dividendYield: 2.5, // Replace with actual data if available
+    })}
+  >
+    <Text style={styles.stockName}>{stock.name}</Text>
+    <Text style={styles.stockPrice}>{stock.price}</Text>
+    <Text style={styles.stockChange}>{stock.change}</Text>
+  </TouchableOpacity>
+))}
         </ScrollView>
       </View>
 
@@ -66,22 +86,22 @@ const DashboardPage: React.FC<Props> = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navButton}
-          onPress={() => navigation.navigate('HoldingsPage')} // Navigate to HoldingsPage on press
-          >
+          onPress={() => navigation.navigate('HoldingsPage')} 
+        >
           <Icon name="account-balance-wallet" size={24} color="#f59025" />
           <Text style={styles.navButtonText}>My Holdings</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navButton}
           onPress={() => navigation.navigate('ProfilePage', {
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            mobile: '+1234567890',
+            name: 'Virat Kohli',
+            email: 'viratkohli@gmail.com',
+            mobile: '+99953477263',
             profilePhotoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCvFCNx3XOOU9GirFqWfVMedEN_EIzJS-aKg&s',
-            tradeBalance: 1000,
-            bankAccounts: ['Bank A', 'Bank B']
+            tradeBalance: 150000,
+            bankAccounts: ['Federal Bank: ********4656', 'HDFC Bank: ********9001'],
           })}
-          >
+        >
           <Icon name="person" size={24} color="#f59025" />
           <Text style={styles.navButtonText}>My Profile</Text>
         </TouchableOpacity>
@@ -95,6 +115,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20
+  },
+  searchBar: {
+    height: 40,
+    borderColor: '#b0bec5',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+
+    backgroundColor: '#f0f0f0',
   },
   pageTitle: {
     fontSize: 24,
@@ -123,12 +153,10 @@ const styles = StyleSheet.create({
   },
   topContainers: {
     flexDirection: 'row',
-    
     justifyContent: 'space-between',
     marginBottom: 20,
     padding: 10,
     borderColor: '#b0bec5',
-    borderWidth: 1,
     borderRadius: 10
   },
   containerBox: {
@@ -188,6 +216,7 @@ const styles = StyleSheet.create({
     color: '#888'
   },
   navBar: {
+    marginTop:30,
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderTopWidth: 1,
