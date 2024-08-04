@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { Card, Title, Paragraph, Surface, useTheme } from 'react-native-paper';
-// Remove LinearGradient import
-// import { LinearGradient } from 'expo-linear-gradient'; // Gradient backgrounds
 import { formatCurrency, formatDecimal, calculatePercentage, formatProfitLoss } from './utils';
 
 const { width } = Dimensions.get('window');
@@ -43,7 +41,7 @@ const HoldingsPage = () => {
                 <Text style={styles.statValue}>{formatCurrency(totalCurrent)}</Text>
               </Surface>
             </View>
-            <Surface style={[styles.statSurfaceWhite, styles.statSurfaceFullWidth]}>
+            <Surface style={styles.profitLossSurface}>
               <Text style={styles.statLabel}>Profit/Loss</Text>
               <Text style={[
                 styles.statValue,
@@ -91,75 +89,82 @@ const HoldingsPage = () => {
   };
   
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 16,
-      backgroundColor: '#ffffff',
-    },
-    dashboard: {
-      padding: 16,
-      borderRadius: 8,
-      marginBottom: 16,
-      elevation: 4,
-      backgroundColor: '#d3ecbc', // Pastel green background
-    },
-    title: {
-      fontSize: 24,
-      color: '#6db474',
-      fontWeight: 'bold',
-      marginBottom: 12,
-    },
-    statsContainer: {
-      marginTop: 8,
-    },
-    statsRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 8,
-    },
-    statSurfaceWhite: {
-      padding: 10,
-      borderRadius: 8,
-      elevation: 2,
-      backgroundColor: '#ffffff',
-      alignItems: 'center',
-      marginBottom: 8,
-      width: (width - 48) / 2 - 10, // Adjust width to fit on screen with margins
-    },
-    statSurfaceFullWidth: {
-      width: width - 32, // Full width for merged P&L row
-    },
-    statLabel: {
-      fontSize: 12,
-      color: '#8db670',
-    },
-    statValue: {
-      fontSize: 14,
-      fontWeight: 'bold',
-    },
-    greenScore: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#6db474',
-    },
-    profit: {
-      color: '#4caf50', // Green for profit
-    },
-    loss: {
-      color: '#f44336', // Red for loss
-    },
-    card: {
-      marginBottom: 12,
-      borderRadius: 8,
-      elevation: 2,
-    },
-    cardTitle: {
-      fontSize: 16,
-      color: '#004d40',
-    },
-    list: {
-      paddingBottom: 16,
-    },
-  });
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#ffffff',
+  },
+  dashboard: {
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 16,
+    elevation: 4,
+    backgroundColor: '#d3ecbc', // Pastel green background
+  },
+  title: {
+    fontSize: 24,
+    color: '#6db474',
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  statsContainer: {
+    marginTop: 8,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    flexWrap: 'wrap', // Allow items to wrap to the next line
+  },
+  statSurfaceWhite: {
+    padding: 10,
+    borderRadius: 8,
+    elevation: 2,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    marginBottom: 8,
+    width: (width - 48) / 2 - 10, // Adjust width to fit on screen with margins
+  },
+  profitLossSurface: {
+    padding: 10,
+    borderRadius: 8,
+    elevation: 2,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    marginBottom: 8,
+    width: '100%', // Full width for the Profit/Loss box
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#8db670',
+  },
+  statValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  greenScore: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#6db474',
+  },
+  profit: {
+    color: '#4caf50', // Green for profit
+  },
+  loss: {
+    color: '#f44336', // Red for loss
+  },
+  card: {
+    marginBottom: 12,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  cardTitle: {
+    fontSize: 16,
+    color: '#004d40',
+  },
+  list: {
+    paddingBottom: 16,
+  },
+});
   
   export default HoldingsPage;

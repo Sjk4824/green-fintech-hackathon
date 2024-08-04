@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import InputField from "./InputField"; // Adjust the path based on your project structure
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from "../App"; // Import RootStackParamList from App file
+import { RootStackParamList } from "../navigation/navigationTypes"; // Import RootStackParamList from App file
 
 // Define navigation prop type
 type LoginPageNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;

@@ -1,6 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { RootStackParamList } from "../navigation/navigationTypes";
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type DashboardPageNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+
+interface Props {
+  navigation: DashboardPageNavigationProp;
+}
 
 // Temporary data for demonstration
 const stocks = [
@@ -11,7 +19,7 @@ const stocks = [
   { name: 'RST PLC', price: '$89.75', change: '+1.75%' }
 ];
 
-const DashboardPage: React.FC = () => {
+const DashboardPage: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.pageTitle}>Dashboard</Text>
@@ -56,11 +64,24 @@ const DashboardPage: React.FC = () => {
           <Icon name="home" size={30} color="#f59025" />
           <Text style={styles.navButtonText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
+        <TouchableOpacity 
+          style={styles.navButton}
+          onPress={() => navigation.navigate('HoldingsPage')} // Navigate to HoldingsPage on press
+          >
           <Icon name="account-balance-wallet" size={24} color="#f59025" />
           <Text style={styles.navButtonText}>My Holdings</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
+        <TouchableOpacity 
+          style={styles.navButton}
+          onPress={() => navigation.navigate('ProfilePage', {
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+            mobile: '+1234567890',
+            profilePhotoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCvFCNx3XOOU9GirFqWfVMedEN_EIzJS-aKg&s',
+            tradeBalance: 1000,
+            bankAccounts: ['Bank A', 'Bank B']
+          })}
+          >
           <Icon name="person" size={24} color="#f59025" />
           <Text style={styles.navButtonText}>My Profile</Text>
         </TouchableOpacity>
